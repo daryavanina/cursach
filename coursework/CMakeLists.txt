@@ -12,7 +12,7 @@ endif()
 project ("coursework")
 
 # Добавьте источник в исполняемый файл этого проекта.
-add_executable (coursework "coursework.cpp" "coursework.h")
+add_executable (coursework "coursework.cpp" "coursework.hpp" "console.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET coursework PROPERTY CXX_STANDARD 20)
