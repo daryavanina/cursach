@@ -11,8 +11,8 @@ int main(    //){
 {
     std::cout.precision(7);
     double start = 1, finish = 2, step = 10;
-    char meth = '1';//номер метода в map_meth
-    std::string fun = "";//функция в map_fun
+    char meth = '1';//method number in map_meth
+    std::string fun = "";//function in map_fun
     start = std::stod(argv[1]);
     finish = std::stod(argv[2]);
     step = std::stod(argv[3]);
@@ -20,7 +20,7 @@ int main(    //){
     meth = *argv[5];
     Integral check = Integral(start, finish, step);
 
-    std::map < std::string, std::function<double(double)>> map_fun{//map функций
+    std::map < std::string, std::function<double(double)>> map_fun{//map of functions
         {"sin",
                 [](double x) {
                     return sin(x);
@@ -37,13 +37,13 @@ int main(    //){
                 }
         }
     };
-    std::map < char, std::function<double(std::function<double(double)>, double, double, int)>> map_meth{//map методов
+    std::map < char, std::function<double(std::function<double(double)>, double, double, int)>> map_meth{//method map
         {'1', Left_Rect },
         {'2', Right_Rect},
         {'3', Trapezoid},
         {'4', Simpson}
     };
-    if (!(map_fun.contains(fun) && map_meth.contains(meth)) || (step<=0) || (finish<start)) {
+    if (!(map_fun.contains(fun) && map_meth.contains(meth)) || (step<=0) || (finish<start)) {//abequacy check
         std::cout << "Incorrent data";
     }
     else {
