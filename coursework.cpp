@@ -1,4 +1,4 @@
-﻿//#ifndef UNTITLED_RATIONAL_H
+//#ifndef UNTITLED_RATIONAL_H
 //#define UNTITLED_RATIONAL_H
 //#endif //UNTITLED_RATIONAL_H
 //#include <iosfwd>
@@ -27,7 +27,7 @@ Integral::Integral(const double start, const double finish, const int step) {
     step_ = step;
 }
 
-double Left_Rect(std::function<double(double)> f, double a, double b, double n) {//интеграл левыми прямоугольниками
+double Left_Rect(std::function<double(double)> f, double a, double b, double n) {//calculation of the integral by the method of left rectangles
     double step = (b - a) / n;  
     double area = 0.0;  
     for (int i = 0; i <= n - 1; ++i) {
@@ -35,7 +35,7 @@ double Left_Rect(std::function<double(double)> f, double a, double b, double n) 
     }
     return area;
 }
-double Right_Rect(std::function<double(double)> f, double a, double b, double n) {//интеграл правыми треугольниками
+double Right_Rect(std::function<double(double)> f, double a, double b, double n) {//calculation of the integral by the method of right rectangles
     double step = (b - a) / n;  
     double area = 0.0;  
     for (int i = 1; i <= n; i++) {
@@ -43,7 +43,7 @@ double Right_Rect(std::function<double(double)> f, double a, double b, double n)
     }
     return area;
 }
-double Trapezoid(std::function<double(double)> f, double a, double b, double n) {//интеграл трапециями
+double Trapezoid(std::function<double(double)> f, double a, double b, double n) {//calculation of the integral by the trapezoid method
     double step = (b - a) / n;  
     double area = f(a) + f(b);  
     for (int i = 1; i <= n - 1; i++) {
@@ -52,7 +52,7 @@ double Trapezoid(std::function<double(double)> f, double a, double b, double n) 
     area *= step / 2;
     return area;
 }
-double Simpson(std::function<double(double)> f, double a, double b, double n) {//интеграл методом Симпсона
+double Simpson(std::function<double(double)> f, double a, double b, double n) {//calculation of the integral by the Simpson method
     double step = (b - a) / n;  
     double area = f(a)+f(b);  
     int k = 0;
@@ -70,7 +70,7 @@ double MAINF(std::function<double(double)> f,
     return g(f, rhs.start_,rhs.finish_,rhs.step_);
 }
 
-void Out_to_Tex(const Integral& rhs, const std::string fun, const int meth) {
+void Out_to_Tex(const Integral& rhs, const std::string fun, const int meth) {//method for outputting code in Latex
     double start = rhs.start_;
     double finish = rhs.finish_;
     int step = rhs.step_;
