@@ -1,4 +1,4 @@
-#include"coursework.cpp"
+#include"coursework.hpp"
 #include<iostream>
 #include<functional>
 #include<sstream>
@@ -43,7 +43,8 @@ int main(    //){
         {'3', Trapezoid},
         {'4', Simpson}
     };
-    if (!(map_fun.contains(fun) && map_meth.contains(meth)) || (step<=0) || (finish<start)) {//abequacy check
+
+    if (!(map_fun.find(fun) == map_fun.end() && map_meth.find(meth) == map_meth.end()) || (step<=0) || (finish<start)) {//abequacy check
         std::cout << "Incorrent data";
     }
     else {
