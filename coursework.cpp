@@ -1,14 +1,8 @@
-//#ifndef UNTITLED_RATIONAL_H
-//#define UNTITLED_RATIONAL_H
-//#endif //UNTITLED_RATIONAL_H
-//#include <iosfwd>
-
 #include"coursework.hpp"
-
 #define _USE_MATH_DEFINES
 #define eps 0.001
 #include<functional>
-#include <cmath>
+#include<cmath>
 #include<string>
 #include<map>
 #include<sstream>
@@ -21,13 +15,13 @@ Integral::Integral(const Integral& rhs)
     step_ = rhs.step_;
 }
 
-Integral::Integral(const double start, const double finish, const int step) {
+Integral::Integral(const double start, const double finish, const double step) {
     start_ = start;
     finish_ = finish;
     step_ = step;
 }
 
-double Left_Rect(std::function<double(double)> f, double a, double b, double n) {
+double Integral::Left_Rect(std::function<double(double)> f, double a, double b, double n) {
     double step = (b - a) / n;  
     double area = 0.0;  
     for (int i = 0; i <= n - 1; ++i) {
@@ -35,7 +29,7 @@ double Left_Rect(std::function<double(double)> f, double a, double b, double n) 
     }
     return area;
 }
-double Right_Rect(std::function<double(double)> f, double a, double b, double n) {
+double Integral::Right_Rect(std::function<double(double)> f, double a, double b, double n) {
     double step = (b - a) / n;  
     double area = 0.0;  
     for (int i = 1; i <= n; i++) {
@@ -43,7 +37,7 @@ double Right_Rect(std::function<double(double)> f, double a, double b, double n)
     }
     return area;
 }
-double Trapezoid(std::function<double(double)> f, double a, double b, double n) {
+double Integral::Trapezoid(std::function<double(double)> f, double a, double b, double n) {
     double step = (b - a) / n;  
     double area = f(a) + f(b);  
     for (int i = 1; i <= n - 1; i++) {
@@ -52,7 +46,7 @@ double Trapezoid(std::function<double(double)> f, double a, double b, double n) 
     area *= step / 2;
     return area;
 }
-double Simpson(std::function<double(double)> f, double a, double b, double n) {
+double Integral::Simpson(std::function<double(double)> f, double a, double b, double n) {
     double step = (b - a) / n;  
     double area = f(a)+f(b);  
     int k = 0;
@@ -64,18 +58,16 @@ double Simpson(std::function<double(double)> f, double a, double b, double n) {
     return area;
 }
 
-double MAINF(std::function<double(std::function<double(double)>, double, double, double)> method,
+double Integral::MAINF(std::function<double(std::function<double(double)>, double, double, double)> method,
     std::function<double(double)> function,
     const Integral& rhs) {
     return method(function, rhs.start_,rhs.finish_,rhs.step_);
 }
 
-
-
-void Out_to_Tex(const Integral& rhs, const std::string fun, const std::string meth) {
+void Integral::Out_to_Tex(const Integral& rhs, const std::string fun, const std::string meth) {
     double start = rhs.start_;
     double finish = rhs.finish_;
-    int step = rhs.step_;
+    double step = rhs.step_;
     double stepForTex = 0;
     stepForTex = (finish - start) / step;
 
@@ -119,7 +111,7 @@ void Out_to_Tex(const Integral& rhs, const std::string fun, const std::string me
         {"sqx",
                 [](std::string x) {
                     std::string s = "";
-                    s += "\\draw[blue, samples = 1000]   plot(\\x, {\\x*\\x}) node[right]{$f(x) = \\x^2$ }; %function\n";
+                    s += "\\draw[blue, samples = 1000]   plot(\\x, {\\x*\\x}) node[right]{$f(x) = x^2$ }; %function\n";
                     s += "\\draw[->](";
                     s += x;
                     s += ", -1.5) -- (";
@@ -158,20 +150,20 @@ void Out_to_Tex(const Integral& rhs, const std::string fun, const std::string me
         {"1",
             "\\foreach \\x in{" + std::to_string(start) + "," + std::to_string(start + stepForTex) + ",...," +
             std::to_string(finish - eps) + " }% left rectangels\n" +
-            "     \\draw[red, thick](\\x, 0) rectangle(\\x + " + std::to_string(stepForTex) + ", {" + fun_for_meth[fun]("x") + "}); "
+            "     \\draw[red, thick](\\x, 0) rectangle(\\x + " + std::to_string(stepForTex) + ", {" + fun_for_meth[fun]("x") + "});\n "
         },
         {"2",
             "\\foreach \\x in{" + std::to_string(start) + "," + std::to_string(start + stepForTex) + ",...," +
             std::to_string(finish - eps) + " }% right rectangels\n" +
             "     \\draw[red, thick](\\x, 0) rectangle(\\x + " + std::to_string(stepForTex) + ", {" + fun_for_meth[fun]("x + " +
-            std::to_string(stepForTex)) + "});"
+            std::to_string(stepForTex)) + "});\n"
         },
         {"3",
             "\\foreach \\x in{" + std::to_string(start) + "," + std::to_string(start + stepForTex) + ",...," +
             std::to_string(finish - eps) + " }%trapezoids\n" +
             "     \\draw[red, thick](\\x, 0) -- (\\x,{" + fun_for_meth[fun]("x") + "}) -- (\\x + " + std::to_string(stepForTex) + ",{" +
             fun_for_meth[fun]("x+"+ std::to_string(stepForTex)) + "}) -- \n" + "     (\\x+" + std::to_string(stepForTex) + 
-            ",0) -- cycle;"
+            ",0) -- cycle;\n"
         },
         {"4",
             "\\foreach \\x in{" + std::to_string(start) + "," + std::to_string(start + stepForTex) + ",...," +
@@ -180,7 +172,7 @@ void Out_to_Tex(const Integral& rhs, const std::string fun, const std::string me
             ",0) --(\\x+" + std::to_string(stepForTex) + ",{" + fun_for_meth[fun]("x+" + std::to_string(stepForTex)) +
             "}) (\\x,{" + fun_for_meth[fun]("x") + "}) parabola bend(\\x + " + std::to_string(stepForTex / 2) + ",{" +
             fun_for_meth[fun]("x+" + std::to_string(stepForTex / 2)) + "}) (\\x + " + std::to_string(stepForTex) +
-            ",{" + fun_for_meth[fun]("x+" + std::to_string(stepForTex)) + "});"
+            ",{" + fun_for_meth[fun]("x+" + std::to_string(stepForTex)) + "});\n"
         }
     };
 
@@ -200,7 +192,6 @@ void Out_to_Tex(const Integral& rhs, const std::string fun, const std::string me
         out << finish + 2.5;
         out << ", 0)node[right] {$x$};% arrow Ox\n";
         std::string x_for_arrowOy = "";
-        //double y_for_arrowOy = 0;
         if (start * finish <= 0 || (std::abs(start) - 2 <= 0) || (std::abs(finish) - 2 <= 0)) {//oy on 0 
             x_for_arrowOy = "0";
         }
@@ -219,7 +210,6 @@ void Out_to_Tex(const Integral& rhs, const std::string fun, const std::string me
         out << (int)finish + 1;
         out << " }% Ox designation\n";
         out << "     \\draw[white!50!black](\\x cm, 2pt) -- (\\x cm, -2pt) node[anchor = north, font = \\tiny]{$\\x$};\n";
-        //out << " % dashes on Ox\n";
         out << "\\draw(";
         out << finish;
         out << ", 2pt) -- (";
@@ -234,10 +224,8 @@ void Out_to_Tex(const Integral& rhs, const std::string fun, const std::string me
         out << ", -2pt) node[anchor = south east,font=\\tiny]{";
         out << start;
         out << "}; % start dashes\n";
-        //out << "\n";
-        //out << Out_Tex_fun[fun](start, finish);
         out << Out_Tex_meth[meth];
-        out << "\n\\\end{tikzpicture}\n";
+        out << "\\end{tikzpicture}\n";
         out << "\\end{document}";
     }
     out.close();
