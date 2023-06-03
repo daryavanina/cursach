@@ -15,45 +15,15 @@ public:
     Integral& operator=(const Integral& rhs) = default;
     ~Integral() = default;
 
-    /**
-    * @brief Функция для вычисления интеграла методом левых прямоугольников
-    * @param f подынтегральная функция
-    * @param a начало отрезка интегрирования
-    * @param b конец отрезка интегрирования
-    * @param n количество прямоугольников в отрезке
-    * @return численное значения интеграла
-    */
-    double Left_Rect(std::function<double(double)> f, double a, double b, double n);
+   /* double Left_Rect(std::function<double(double)> f, double a, double b, double n);
 
-    /**
-    * @brief Функция для вычисления интеграла методом правых прямоугольников
-    * @param f подынтегральная функция
-    * @param a начало отрезка интегрирования
-    * @param b конец отрезка интегрирования
-    * @param n количество прямоугольников в отрезке
-    * @return численное значения интеграла
-    */
     double Right_Rect(std::function<double(double)> f, double a, double b, double n);
 
-    /**
-    * @brief Функция для вычисления интеграла методом трапеций
-    * @param f подынтегральная функция
-    * @param a начало отрезка интегрирования
-    * @param b конец отрезка интегрирования
-    * @param n количество трапеций в отрезке
-    * @return численное значения интеграла
-    */
     double Trapezoid(std::function<double(double)> f, double a, double b, double n);
 
-    /**
-    * @brief Функция для вычисления интеграла методом Симпсона
-    * @param f подынтегральная функция
-    * @param a начало отрезка интегрирования
-    * @param b конец отрезка интегрирования
-    * @param n количество криволинейных трапеций в отрезке
-    * @return численное значения интеграла
-    */
     double Simpson(std::function<double(double)> f, double a, double b, double n);
+    */
+
 
     /**
     * @brief функция для вывода численного ответа
@@ -66,7 +36,7 @@ public:
         std::function<double(double)> function,
         const Integral& rhs);
 
-    /*
+    /**
     * @brief функция для вывода в Tex
     * @param rhs вычисляемый интеграл
     * @param fun подынтегральная функция
@@ -74,6 +44,11 @@ public:
     */
     void Out_to_Tex(const Integral& rhs, const std::string fun, const std::string meth);
 
+    /**
+    * @brief функция, хранящая метод, с помощью которого считается интеграал
+    * @param meth метод, которым вычисляется интеграл
+    * @return численный ответ или 0, в случае если подынтегральной функции нет
+    */
     std::function<double(std::function<double(double)>, double, double, int)>
         Method(const std::string meth);
 
