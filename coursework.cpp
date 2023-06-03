@@ -64,6 +64,64 @@ double Integral::MAINF(std::function<double(std::function<double(double)>, doubl
     return method(function, rhs.start_,rhs.finish_,rhs.step_);
 }
 
+std::function<double(std::function<double(double)>, double, double, int)>
+Integral::Method(const std::string meth) {
+    std::map < std::string, std::function<double(std::function<double(double)>, double, double, int)>> map_meth{//method map
+       {"1",
+            [](std::function<double(double)> f, double a, double b, double n) {
+            double step = (b - a) / n;
+            double area = 0.0;
+            for (int i = 0; i <= n - 1; ++i) {
+                area += f(a + i * step) * step;
+                }
+            return area;
+            }
+       },
+       {"2",
+            [](std::function<double(double)> f, double a, double b, double n) {
+            double step = (b - a) / n;
+            double area = 0.0;
+            for (int i = 1; i <= n; i++) {
+                area += f(a + i * step) * step;
+            }
+            return area;
+            }
+       },
+       {"3",
+            [](std::function<double(double)> f, double a, double b, double n) {
+            double step = (b - a) / n;
+            double area = f(a) + f(b);
+            for (int i = 1; i <= n - 1; i++) {
+                area += 2 * f(a + i * step);
+            }
+            area *= step / 2;
+            return area;
+            }
+       },
+       {"4",
+            [](std::function<double(double)> f, double a, double b, double n) {
+            double step = (b - a) / n;
+            double area = f(a) + f(b);
+            int k = 0;
+            for (int i = 1; i <= n - 1; i++) {
+                k = 2 + 2 * (i % 2);
+            area += k * f(a + i * step);
+            }
+            area *= step / 3;
+            return area;
+            }
+       }
+    };
+
+
+    if (map_meth.find(meth) == map_meth.end()) {
+        return 0;
+    }
+    else {
+        return map_meth[meth];
+    }
+};
+
 void Integral::Out_to_Tex(const Integral& rhs, const std::string fun, const std::string meth) {
     double start = rhs.start_;
     double finish = rhs.finish_;
@@ -226,7 +284,7 @@ void Integral::Out_to_Tex(const Integral& rhs, const std::string fun, const std:
         out << "}; % start dashes\n";
         out << Out_Tex_meth[meth];
         out << "\\end{tikzpicture}\n";
-        out << "\\end{document}";
+        out << "\\end{document}%blyat";
     }
     out.close();
 }
