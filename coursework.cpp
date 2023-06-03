@@ -27,7 +27,7 @@ Integral::Integral(const double start, const double finish, const int step) {
     step_ = step;
 }
 
-double Left_Rect(std::function<double(double)> f, double a, double b, double n) {//calculation of the integral by the method of left rectangles
+double Left_Rect(std::function<double(double)> f, double a, double b, double n) {
     double step = (b - a) / n;  
     double area = 0.0;  
     for (int i = 0; i <= n - 1; ++i) {
@@ -35,7 +35,7 @@ double Left_Rect(std::function<double(double)> f, double a, double b, double n) 
     }
     return area;
 }
-double Right_Rect(std::function<double(double)> f, double a, double b, double n) {//calculation of the integral by the method of right rectangles
+double Right_Rect(std::function<double(double)> f, double a, double b, double n) {
     double step = (b - a) / n;  
     double area = 0.0;  
     for (int i = 1; i <= n; i++) {
@@ -43,7 +43,7 @@ double Right_Rect(std::function<double(double)> f, double a, double b, double n)
     }
     return area;
 }
-double Trapezoid(std::function<double(double)> f, double a, double b, double n) {//calculation of the integral by the trapezoid method
+double Trapezoid(std::function<double(double)> f, double a, double b, double n) {
     double step = (b - a) / n;  
     double area = f(a) + f(b);  
     for (int i = 1; i <= n - 1; i++) {
@@ -52,7 +52,7 @@ double Trapezoid(std::function<double(double)> f, double a, double b, double n) 
     area *= step / 2;
     return area;
 }
-double Simpson(std::function<double(double)> f, double a, double b, double n) {//calculation of the integral by the Simpson method
+double Simpson(std::function<double(double)> f, double a, double b, double n) {
     double step = (b - a) / n;  
     double area = f(a)+f(b);  
     int k = 0;
@@ -64,31 +64,81 @@ double Simpson(std::function<double(double)> f, double a, double b, double n) {/
     return area;
 }
 
-double MAINF(std::function<double(double)> f,
-    std::function<double(std::function<double(double)>, double, double, double)> g,
+double MAINF(std::function<double(std::function<double(double)>, double, double, double)> method,
+    std::function<double(double)> function,
     const Integral& rhs) {
-    return g(f, rhs.start_,rhs.finish_,rhs.step_);
+    return method(function, rhs.start_,rhs.finish_,rhs.step_);
 }
 
-void Out_to_Tex(const Integral& rhs, const std::string fun, const int meth) {//method for outputting code in Latex
+
+
+void Out_to_Tex(const Integral& rhs, const std::string fun, const std::string meth) {
     double start = rhs.start_;
     double finish = rhs.finish_;
     int step = rhs.step_;
     double stepForTex = 0;
     stepForTex = (finish - start) / step;
 
-    std::map < std::string, std::string> Out_Tex_fun{
+    std::map < std::string, std::function<std::string(std::string)>> Out_Tex_fun{
         {"sin",
-                "\\draw[blue, samples = 1000]   plot(\\x, {sin(\\x r) }) node[right]{$f(x) = \\sin x$ }; % function\n"},
+               [](std::string x) {
+                    std::string s = "";
+                    s += "\\draw[blue, samples = 1000]   plot(\\x, {sin(\\x r) }) node[right]{$f(x) = \\sin x$ }; %function\n";
+                    s += "\\draw[->](";
+                    s += x;
+                    s += ", -1.5) -- (";
+                    s += x;
+                    s += ", 1.5)node[above]{$f(x)$};% arrow Oy\n";
+                    s += "\\foreach \\y in{-1,...,1} % Oy designation\n";
+                    s += "\\draw[white!50!black](";
+                    s += x;
+                    s += "cm-2pt, \\y cm) -- (";
+                    s += x;
+                    s += "cm+2pt, \\y cm) node[anchor = east, font = \\tiny]{$\\y$};\n";
+                    return s;
+               }
+        },
         {"cos",
-                "\\draw[blue, samples = 1000]   plot(\\x, {cos(\\x r) }) node[right]{$f(x) = \\cos x$ }; % function\n"},
+            [](std::string x) {
+                    std::string s = "";
+                    s += "\\draw[blue, samples = 1000]   plot(\\x, {cos(\\x r) }) node[right]{$f(x) = \\sin x$ }; %function\n";
+                    s += "\\draw[->](";
+                    s += x;
+                    s += ", -1.5) -- (";
+                    s += x;
+                    s += ", 1.5)node[above]{$f(x)$};% arrow Oy\n";
+                    s += "\\foreach \\y in{-1,...,1} % Oy designation\n";
+                    s += "\\draw[white!50!black](";
+                    s += x;
+                    s += "cm-2pt, \\y cm) -- (";
+                    s += x;
+                    s += "cm+2pt, \\y cm) node[anchor = east, font = \\tiny]{$\\y$};\n";
+                    return s;
+                    }
+        },
         {"sqx",
-                "\\draw[blue, samples = 1000]   plot(\\x, {\\x*\\x }) node[right]{$f(x) = \\ x^2 $ }; % function\n"}
+                [](std::string x) {
+                    std::string s = "";
+                    s += "\\draw[blue, samples = 1000]   plot(\\x, {\\x*\\x}) node[right]{$f(x) = \\x^2$ }; %function\n";
+                    s += "\\draw[->](";
+                    s += x;
+                    s += ", -1.5) -- (";
+                    s += x;
+                    s += ", 1.5)node[above]{$f(x)$};% arrow Oy\n";
+                    s += "\\foreach \\y in{-1,...,1} % Oy designation\n";
+                    s += "\\draw[white!50!black](";
+                    s += x;
+                    s += "cm-2pt, \\y cm) -- (";
+                    s += x;
+                    s += "cm+2pt, \\y cm) node[anchor = east, font = \\tiny]{$\\y$};\n";
+                    return s;
+                    }
+        }
     };
 
     std::map<std::string, std::function<std::string(std::string)>> fun_for_meth{
         {"sin",
-                [](std::string var) {
+               [](std::string var) {
                 return "sin(deg(\\" + var + "))";
                 }
         },
@@ -104,91 +154,91 @@ void Out_to_Tex(const Integral& rhs, const std::string fun, const int meth) {//m
         }
     };
 
-    std::map < char, std::string> Out_Tex_meth{
-        {'1',
-            "\\foreach \\x in{" + std::to_string(start) + "," + std::to_string(start + stepForTex) + ",...," + std::to_string(finish - eps) +
-            " }% left rectangels\n\
-            \\draw[red, thick](\\x, 0) rectangle(\\x + " + std::to_string(stepForTex) + ", {" + fun_for_meth[fun]("x") + "});"
+    std::map < std::string, std::string> Out_Tex_meth{
+        {"1",
+            "\\foreach \\x in{" + std::to_string(start) + "," + std::to_string(start + stepForTex) + ",...," +
+            std::to_string(finish - eps) + " }% left rectangels\n" +
+            "     \\draw[red, thick](\\x, 0) rectangle(\\x + " + std::to_string(stepForTex) + ", {" + fun_for_meth[fun]("x") + "}); "
         },
-        {'2',
-             "\\foreach \\x in{" + std::to_string(start) + "," + std::to_string(start + stepForTex) + ",...," + std::to_string(finish - eps) +
-            " }% right rectangels\n\
-            \\draw[red, thick](\\x, 0) rectangle(\\x + " + std::to_string(stepForTex) + ", {" + fun_for_meth[fun]("x+" + std::to_string(stepForTex)) + "});"
+        {"2",
+            "\\foreach \\x in{" + std::to_string(start) + "," + std::to_string(start + stepForTex) + ",...," +
+            std::to_string(finish - eps) + " }% right rectangels\n" +
+            "     \\draw[red, thick](\\x, 0) rectangle(\\x + " + std::to_string(stepForTex) + ", {" + fun_for_meth[fun]("x + " +
+            std::to_string(stepForTex)) + "});"
         },
-        {'3',
-            "\n\ \\foreach \\x in{" + std::to_string(start) + "," + std::to_string(start + stepForTex) + ",...," + std::to_string(finish - eps) +
-            " }%trapezoids\n\
-            \\draw[red, thick](\\x, 0) -- (\\x,{" + fun_for_meth[fun]("x") + "}) -- (\\x+" + std::to_string(stepForTex) + ",{" + fun_for_meth[fun]("x+"+ std::to_string(stepForTex))
-            + "}) -- (\\x+" + std::to_string(stepForTex) + ",0) -- cycle;"
+        {"3",
+            "\\foreach \\x in{" + std::to_string(start) + "," + std::to_string(start + stepForTex) + ",...," +
+            std::to_string(finish - eps) + " }%trapezoids\n" +
+            "     \\draw[red, thick](\\x, 0) -- (\\x,{" + fun_for_meth[fun]("x") + "}) -- (\\x + " + std::to_string(stepForTex) + ",{" +
+            fun_for_meth[fun]("x+"+ std::to_string(stepForTex)) + "}) -- \n" + "     (\\x+" + std::to_string(stepForTex) + 
+            ",0) -- cycle;"
         },
-        {'4',
-            "\\foreach \\x in{" + std::to_string(start) + "," + std::to_string(start + stepForTex) + ",...," + std::to_string(finish - eps) +
-            " }% Simpson\n\
-            \\draw[red, thick](\\x,{" + fun_for_meth[fun]("x") + "}) -- (\\x,0) -- (\\x+" + std::to_string(stepForTex) + ",0) --(\\x+" + std::to_string(stepForTex) +
-            ",{" + fun_for_meth[fun]("x+" + std::to_string(stepForTex)) + "}) (\\x,{" + fun_for_meth[fun]("x") + "}) parabola bend(\\x + " + std::to_string(stepForTex / 2) 
-            + ",{" + fun_for_meth[fun]("x+" + std::to_string(stepForTex / 2)) + "}) (\\x + " + std::to_string(stepForTex) + ",{" 
-            + fun_for_meth[fun]("x+" + std::to_string(stepForTex)) + "});"
+        {"4",
+            "\\foreach \\x in{" + std::to_string(start) + "," + std::to_string(start + stepForTex) + ",...," +
+            std::to_string(finish - eps) + " }% Simpson\n" +
+            "     \\draw[red, thick](\\x,{" + fun_for_meth[fun]("x") + "}) -- (\\x,0) -- (\\x + " + std::to_string(stepForTex) +
+            ",0) --(\\x+" + std::to_string(stepForTex) + ",{" + fun_for_meth[fun]("x+" + std::to_string(stepForTex)) +
+            "}) (\\x,{" + fun_for_meth[fun]("x") + "}) parabola bend(\\x + " + std::to_string(stepForTex / 2) + ",{" +
+            fun_for_meth[fun]("x+" + std::to_string(stepForTex / 2)) + "}) (\\x + " + std::to_string(stepForTex) +
+            ",{" + fun_for_meth[fun]("x+" + std::to_string(stepForTex)) + "});"
         }
     };
 
     std::ofstream out;
     out.open("tex.tex");
     if (out.is_open()) {
-        out << "\\documentclass{article}\n\
-        \\usepackage{tikz}\n\
-        \\usepackage{pgfplots}\n\
-        \\begin{document}\n\
-        \\begin{tikzpicture} [domain = ";
+        out << "\\documentclass{article}\n";
+        out << "\\usepackage{tikz}\n";
+        out << "\\usepackage{pgfplots}\n";
+        out << "\\begin{document}\n";
+        out << "\\begin{tikzpicture}[domain = ";
         out << start - 0.5 << ":" << finish + 0.5;
         out << ", scale = 1]\n";
-        if (start * finish >= 0) {
-            out<<"\\draw[->](";
-            out << start - 1;
-            out << ", -5) -- (";
-            out << start - 1;
-            out << ", 5)node[above]{$f(x)$}; % arrow Oy\n";
-            out << "\\foreach \\y in{-1,...,1} % Oy designation\n\
-                    \\draw[white!50!black](";
-            out << start - 1;
-            out << "cm-2pt, \\y cm) -- (";
-            out << start - 1;
-            out << "cm+2pt, \\y cm) node[anchor = east,font=\\tiny]{$\\y$};%dashes on Oy\n";
+        out << "\\draw[->](";
+        out << start - 2;
+        out << ", 0) -- (";
+        out << finish + 2.5;
+        out << ", 0)node[right] {$x$};% arrow Ox\n";
+        std::string x_for_arrowOy = "";
+        //double y_for_arrowOy = 0;
+        if (start * finish <= 0 || (std::abs(start) - 2 <= 0) || (std::abs(finish) - 2 <= 0)) {//oy on 0 
+            x_for_arrowOy = "0";
         }
         else {
-            out << "\\draw[->](0, -5) -- (0, 5)node[above]{$f(x)$}; % arrow Oy\n";
-            out<<"\\foreach \\y in{-4,...,4} % Oy designation\n\
-                  \\draw[white!50!black](-2pt, \\y cm) -- (2pt, \\y cm) node[anchor = east,font=\\tiny]{$\\y$};%dashes on Oy\n";
+            if (finish > 0) {
+                x_for_arrowOy = std::to_string(start - 1);
+            }
+            else {
+                x_for_arrowOy = std::to_string(finish + 1);
+            }
         }
-        out<<"\\draw[->](";
-        out << start - 1.5;
-        out << ", 0) -- (";
-        out << finish + 1.5;
-        out << ", 0)node[right] {$x$};% arrow Ox\n\
-    \\foreach \\x in{";
+        out << Out_Tex_fun[fun](x_for_arrowOy);
+        out << "\\foreach \\x in{";
         out << (int)start - 1;
         out << ", ...,";
         out << (int)finish + 1;
-        out << " }% Ox designation\n\
-        \\draw[white!50!black](\\x cm, 2pt) -- (\\x cm, -2pt) node[anchor = north,font=\\tiny]{$\\x$};%dashes on Ox\n\
-    \\draw(";
+        out << " }% Ox designation\n";
+        out << "     \\draw[white!50!black](\\x cm, 2pt) -- (\\x cm, -2pt) node[anchor = north, font = \\tiny]{$\\x$};\n";
+        //out << " % dashes on Ox\n";
+        out << "\\draw(";
         out << finish;
         out << ", 2pt) -- (";
         out << finish;
         out << ", -2pt) node[anchor = south west,font=\\tiny]{";
         out << finish;
-        out << "}; % finish dashes\n\
-\\draw(";
+        out << "}; % finish dashes\n";
+        out << "\\draw(";
         out << start;
         out << ", 2pt) -- (";
         out << start;
         out << ", -2pt) node[anchor = south east,font=\\tiny]{";
         out << start;
         out << "}; % start dashes\n";
-        out << "\n";
-        out << Out_Tex_fun[fun];
+        //out << "\n";
+        //out << Out_Tex_fun[fun](start, finish);
         out << Out_Tex_meth[meth];
-        out<<"\n\\\end{tikzpicture}\n\
-        \\end{document}";
+        out << "\n\\\end{tikzpicture}\n";
+        out << "\\end{document}";
     }
     out.close();
 }
