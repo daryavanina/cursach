@@ -73,6 +73,11 @@ public:
     * @param meth метод, которым вычисляется интеграл
     */
     void Out_to_Tex(const Integral& rhs, const std::string fun, const std::string meth);
+
+    std::function<double(std::function<double(double)>, double, double, int)>
+        Method(const std::string meth);
+
+
 public:
     //! Начало отрезка интегрирования
     double start_{ 0 };
