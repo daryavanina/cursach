@@ -21,42 +21,42 @@ Integral::Integral(const double start, const double finish, const double step) {
     step_ = step;
 }
 
-double Integral::Left_Rect(std::function<double(double)> f, double a, double b, double n) {
-    double step = (b - a) / n;  
-    double area = 0.0;  
-    for (int i = 0; i <= n - 1; ++i) {
-        area += f(a + i * step) * step; 
-    }
-    return area;
-}
-double Integral::Right_Rect(std::function<double(double)> f, double a, double b, double n) {
-    double step = (b - a) / n;  
-    double area = 0.0;  
-    for (int i = 1; i <= n; i++) {
-        area += f(a + i * step) * step; 
-    }
-    return area;
-}
-double Integral::Trapezoid(std::function<double(double)> f, double a, double b, double n) {
-    double step = (b - a) / n;  
-    double area = f(a) + f(b);  
-    for (int i = 1; i <= n - 1; i++) {
-        area += 2 * f(a + i * step); 
-    }
-    area *= step / 2;
-    return area;
-}
-double Integral::Simpson(std::function<double(double)> f, double a, double b, double n) {
-    double step = (b - a) / n;  
-    double area = f(a)+f(b);  
-    int k = 0;
-    for (int i = 1; i <= n - 1; i++) {
-        k = 2 + 2 * (i % 2);
-        area += k * f(a + i * step); 
-    }
-    area *= step / 3;
-    return area;
-}
+//double Integral::Left_Rect(std::function<double(double)> f, double a, double b, double n) {
+//    double step = (b - a) / n;  
+//    double area = 0.0;  
+//    for (int i = 0; i <= n - 1; ++i) {
+//        area += f(a + i * step) * step; 
+//    }
+//    return area;
+//}
+//double Integral::Right_Rect(std::function<double(double)> f, double a, double b, double n) {
+//    double step = (b - a) / n;  
+//    double area = 0.0;  
+//    for (int i = 1; i <= n; i++) {
+//        area += f(a + i * step) * step; 
+//    }
+//    return area;
+//}
+//double Integral::Trapezoid(std::function<double(double)> f, double a, double b, double n) {
+//    double step = (b - a) / n;  
+//    double area = f(a) + f(b);  
+//    for (int i = 1; i <= n - 1; i++) {
+//        area += 2 * f(a + i * step); 
+//    }
+//    area *= step / 2;
+//    return area;
+//}
+//double Integral::Simpson(std::function<double(double)> f, double a, double b, double n) {
+//    double step = (b - a) / n;  
+//    double area = f(a)+f(b);  
+//    int k = 0;
+//    for (int i = 1; i <= n - 1; i++) {
+//        k = 2 + 2 * (i % 2);
+//        area += k * f(a + i * step); 
+//    }
+//    area *= step / 3;
+//    return area;
+//}
 
 double Integral::MAINF(std::function<double(std::function<double(double)>, double, double, double)> method,
     std::function<double(double)> function,
