@@ -40,10 +40,10 @@ int main(
         }
     };
     std::map < std::string, std::function<double(std::function<double(double)>, double, double, int)>> map_meth{//method map
-        {"1", Left_Rect},
-        {"2", Right_Rect},
-        {"3", Trapezoid},
-        {"4", Simpson}
+        {"1", &Integral::Left_Rect},
+        {"2", &Integral::Right_Rect},
+        {"3", &Integral::Trapezoid},
+        {"4", &Integral::Simpson}
     };
 
     if (!(map_fun.find(fun) == map_fun.end()) && map_meth.find(meth) == map_meth.end() ||
@@ -51,8 +51,8 @@ int main(
         std::cout << "Incorrent data";
     }
     else {
-        std::cout << MAINF(map_meth[meth],map_fun[fun], check);
-        Out_to_Tex(check, fun, meth);
+        std::cout << check.MAINF(map_meth[meth],map_fun[fun], check);
+        check.Out_to_Tex(check, fun, meth);
     }
     return 0;
 }
