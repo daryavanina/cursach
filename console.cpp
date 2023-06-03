@@ -39,19 +39,19 @@ int main(
                 }
         }
     };
-    std::map < std::string, std::function<double(std::function<double(double)>, double, double, int)>> map_meth{//method map
-        {"1", &Integral::Left_Rect},
-        {"2", &Integral::Right_Rect},
-        {"3", &Integral::Trapezoid},
-        {"4", &Integral::Simpson}
-    };
+    //std::map < std::string, std::function<double(std::function<double(double)>, double, double, int)>> map_meth{//method map
+    //    {"1", &Integral::Left_Rect},
+    //    {"2", &Integral::Right_Rect},
+    //    {"3", &Integral::Trapezoid},
+    //    {"4", &Integral::Simpson}
+    //};
 
-    if (!(map_fun.find(fun) == map_fun.end()) && map_meth.find(meth) == map_meth.end() ||
+    if (!(map_fun.find(fun) == map_fun.end()) && check.Method(meth)==0 ||//map_meth.find(meth) == map_meth.end() ||
          (step<=0) || (finish<start)) {//abequacy check
         std::cout << "Incorrent data";
     }
     else {
-        std::cout << check.MAINF(map_meth[meth],map_fun[fun], check);
+        std::cout << check.MAINF(check.Method(meth), map_fun[fun], check);
         check.Out_to_Tex(check, fun, meth);
     }
     return 0;
