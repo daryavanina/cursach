@@ -15,16 +15,6 @@ public:
     Integral& operator=(const Integral& rhs) = default;
     ~Integral() = default;
 
-   /* double Left_Rect(std::function<double(double)> f, double a, double b, double n);
-
-    double Right_Rect(std::function<double(double)> f, double a, double b, double n);
-
-    double Trapezoid(std::function<double(double)> f, double a, double b, double n);
-
-    double Simpson(std::function<double(double)> f, double a, double b, double n);
-    */
-
-
     /**
     * @brief функция для вывода численного ответа
     * @param method метод для вычисления интеграла
@@ -49,8 +39,7 @@ public:
     * @param meth метод, которым вычисляется интеграл
     * @return численный ответ или 0, в случае если подынтегральной функции нет
     */
-    std::function<double(std::function<double(double)>, double, double, int)>
-        Method(const std::string meth);
+    std::function<double(std::function<double(double)>, double, double, int)> Method(const std::string meth);
 
 
 public:
