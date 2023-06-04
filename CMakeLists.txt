@@ -15,5 +15,5 @@ target_include_directories(coursework PUBLIC
 )
 install(TARGETS coursework)
 
-add_executable (test_app "console.cpp")
-target_link_libraries(test_app coursework)
+add_executable (console "console.cpp")
+target_link_libraries(console coursework)
